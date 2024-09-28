@@ -1,0 +1,64 @@
+﻿@model AKwebapplication.Models.Home
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<h2>Details</h2>
+
+<div class="card">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title">Person Details</h5>
+                <h5 class="card-title">Basic Information</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>ID:</strong> @Model.Id</li>
+                    <li class="list-group-item"><strong>Name:</strong> @Model.Name</li>
+                    <li class="list-group-item"><strong>Mobile:</strong> @Model.Mobile</li>
+                    <li class="list-group-item"><strong>Occupation:</strong> @Model.Occupation</li>
+                    <li class="list-group-item"><strong>Gender:</strong> @Model.Gender</li>
+                    <li class="list-group-item"><strong>Address:</strong> @Model.Address</li>
+                    <li class="list-group-item"><strong>Sharing:</strong> @Model.Sharing</li>
+                    <li class="list-group-item"><strong>Is Active:</strong> @(Model.IsActive ? "Yes" : "No")</li>
+                </ul>
+
+                <h5 class="card-title mt-4">Dates</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Join Date:</strong> @Model.JoinDate.ToString("d")</li>
+                    <li class="list-group-item"><strong>Fee Paid Date:</strong> @(Model.FeePaidDate?.ToString("d") ?? "N/A")</li>
+                    <li class="list-group-item">
+                        <strong>Due Date:</strong>
+                        @{
+                            var dueDate = Model.DueDate;
+                            string dueDateDisplay = dueDate.HasValue ? dueDate.Value.ToString("d") : "N/A";
+                            var isDueDateOver30Days = dueDate.HasValue && (dueDate.Value - DateTime.Now).TotalDays < 30;
+
+                            if (isDueDateOver30Days)
+                            {
+                                <span style="color: red;">@dueDateDisplay</span>
+                            }
+                            else
+                            {
+                                @dueDateDisplay
+                            }
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4 text-center">
+            @if (!string.IsNullOrEmpty(Model.FileName))
+            {
+                <h5 class="card-title mt-4">Profile Image</h5>
+                <img src="@Url.Content("~/uploads/" + Model.FileName)" alt="Profile Image" class="img-fluid" />
+            }
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to List</a>
+    </div>
+</div>
